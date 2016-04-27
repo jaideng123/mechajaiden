@@ -57,4 +57,7 @@ while True:
                 if(pattern == r"!hello"):
                     chat(s, 'Greetings human, I am TwitchBot-XJ-9. But you may call me MechaJaiden')
                     break
+                if(pattern == r"!purpose"):
+                    chat(s, 'To learn from my master until i am sufficient enough to replace him')
+                    break
     sleep(1 / cfg.RATE)
