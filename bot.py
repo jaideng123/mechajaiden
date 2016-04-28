@@ -3,36 +3,8 @@
 import cfg
 import socket
 import re
+import commands
 from time import sleep
-
-def chat(sock, msg):
-    """
-    Send a chat message to the server.
-    Keyword arguments:
-    sock -- the socket over which to send the message
-    msg  -- the message to be sent
-    """
-    sent ="PRIVMSG {} :{}\r\n".format(cfg.CHAN, msg).encode("utf-8") 
-    sock.send(sent)
-
-def ban(sock, user):
-    """
-    Ban a user from the current channel.
-    Keyword arguments:
-    sock -- the socket over which to send the ban command
-    user -- the user to be banned
-    """
-    chat(sock, ".ban {}".format(user))
-
-def timeout(sock, user, secs=600):
-    """
-    Time out a user for a set period of time.
-    Keyword arguments:
-    sock -- the socket over which to send the timeout command
-    user -- the user to be timed out
-    secs -- the length of the timeout in seconds (default 600)
-    """
-    chat(sock, ".timeout {}".format(user, secs))
 
 
 CHAT_MSG=re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
@@ -52,12 +24,10 @@ while True:
         username = re.search(r"\w+", line).group(0) # return the entire match
         message = CHAT_MSG.sub("", line)
         print(username + ": " + message)
-        for pattern in cfg.PATT:
-            if re.match(pattern, message):
-                if(pattern == r"!hello"):
-                    chat(s, 'Greetings human, I am TwitchBot-XJ-9. But you may call me MechaJaiden')
-                    break
-                if(pattern == r"!purpose"):
-                    chat(s, 'To learn from my master until i am sufficient enough to replace him')
-                    break
+        pattern = r"!\w+"
+        match = re.match(pattern, message)
+        if match:
+            print(match.group(0))
+            commands.commands.get(match.group(0), lambda sock,msg,user: print('command does not exist'))(s,message,username)
+                
     sleep(1 / cfg.RATE)
