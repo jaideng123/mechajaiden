@@ -28,14 +28,13 @@ def writeExpData(filepath):
 
 # write the exp data to a json file
 def readExpData(filepath):
-    f = open(filepath, 'r')
-    if f:
+    with open(filepath, 'r') as f:
         jsonData = f.read()
         newUsers = json.loads(jsonData)
         for user,exp in newUsers.items():
             users[user] = exp
-    else:
-        print("No EXP Data Found")
+        return
+    print('File Does Not Exist')
 
 # calculates the user's level
 # I use an arithmetic progression starting from 200, incrementing by 20
