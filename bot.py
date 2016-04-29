@@ -37,7 +37,7 @@ def expEventLoop():
         for viewer in exp.listViewers():
             exp.addExp(viewer, 50)
         exp.writeExpData('users.json')
-        sleep(5)
+        sleep(cfg.EXPINTERVAL)
 try:
    action_thread = threading.Thread(group=None, target=actionEventLoop, name='Actions-Thread', args=(), kwargs={})
    action_thread.start()
