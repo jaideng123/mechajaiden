@@ -5,7 +5,7 @@ commands = {
     '!hello': lambda sock,msg,user: hello(sock,msg,user),
     '!add': lambda sock,msg,user: add(sock,msg,user),
     '!list': lambda sock,msg,user: list(sock,msg,user),
-    '!queue': lambda sock,msg,user: queue(sock,msg,user),
+    '!queue': lambda sock,msg,user: queue(sock,msg,user)
 
 }
 

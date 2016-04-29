@@ -1,3 +1,6 @@
 __pycache__
 
 cfg.py
+
+*.sublime-workspace
+*.sublime-project
