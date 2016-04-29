@@ -1,14 +1,12 @@
 # bot.py
 
 import cfg
+import commands
+import exp
 import socket
 import re
-import commands
 from time import sleep
-from collections import defaultdict
 import threading
-import requests
-import json
 
 def actionEventLoop():
     CHAT_MSG=re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
@@ -34,19 +32,12 @@ def actionEventLoop():
                 commands.commands.get(match.group(0), lambda sock,msg,user: print('command does not exist'))(s,message,username)
         sleep(1 / cfg.RATE)
 def expEventLoop():
-    users = defaultdict(int)
+    exp.readExpData('users.json')
     while True:
-        request_string = 'https://tmi.twitch.tv/group/user/jaideng123/chatters'
-        r = requests.get(request_string)
-        if(r.status_code == 200):
-            res = json.loads(r.text)
-            viewers = res['chatters']['viewers'] + res['chatters']['moderators']
-            for viewer in viewers:
-                users[viewer] += 50
-            print(users)
-        else:
-            print('error getting users')
-        sleep(1)
+        for viewer in exp.listViewers():
+            exp.addExp(viewer, 50)
+        exp.writeExpData('users.json')
+        sleep(5)
 try:
    action_thread = threading.Thread(group=None, target=actionEventLoop, name='Actions-Thread', args=(), kwargs={})
    action_thread.start()

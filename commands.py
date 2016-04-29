@@ -1,11 +1,14 @@
 import cfg
+import exp
 import re
 import requests
 commands = {
     '!hello': lambda sock,msg,user: hello(sock,msg,user),
     '!add': lambda sock,msg,user: add(sock,msg,user),
     '!list': lambda sock,msg,user: list(sock,msg,user),
-    '!queue': lambda sock,msg,user: queue(sock,msg,user)
+    '!queue': lambda sock,msg,user: queue(sock,msg,user),
+    '!level': lambda sock,msg,user: level(sock,msg,user),
+    '!giveexp': lambda sock,msg,user: giveexp(sock,msg,user)
 
 }
 
@@ -40,6 +43,22 @@ def queue(sock,msg,user):
     r = requests.get(request_string)
     if(r.status_code == 200):
         chat(sock,r.text)
+
+def level(sock,msg,user):
+    level, diff = exp.calculateLevel(exp.users[user])
+    chat(sock,'{} You Are Currently Level {} ({} exp away from level {})'.format(user,level,diff,level+1))
+
+def giveexp(sock,msg,user):
+    if(user != 'jaideng123'):
+        chat(sock,'Sure I\'ll get right on tha- wait a second, you\'re not JaidenG123!')
+        return
+    recipient = msg.split(' ')[1]
+    amount = msg.split(' ')[2].split('\n')[0]
+    exp.addExp(recipient,int(amount))
+    chat(sock,'{} Has Received {} Experience Points'.format(recipient,amount))
+
+
+
 
 # Utility functions
 
