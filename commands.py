@@ -44,18 +44,24 @@ def queue(sock,msg,user):
     if(r.status_code == 200):
         chat(sock,r.text)
 
+#Displays the user's current exp level
 def level(sock,msg,user):
     level, diff = exp.calculateLevel(exp.users[user])
     chat(sock,'{} You Are Currently Level {} ({} exp away from level {})'.format(user,level,diff,level+1))
 
+#Give Exp to a user (or all)
 def giveexp(sock,msg,user):
     if(user != 'jaideng123'):
-        chat(sock,'Sure I\'ll get right on tha- wait a second, you\'re not JaidenG123!')
+        chat(sock,'Sure I\'ll get right on tha- wait a second, you\'re not Jaiden!')
         return
     recipient = msg.split(' ')[1]
     amount = msg.split(' ')[2].split('\n')[0]
+    print(recipient,amount)
     exp.addExp(recipient,int(amount))
-    chat(sock,'{} Has Received {} Experience Points'.format(recipient,amount))
+    if(recipient == 'all'):
+        chat(sock,'Everyone Has Received {} Experience Points'.format(amount))
+    else:
+        chat(sock,'{} Has Received {} Experience Points'.format(recipient,amount))
 
 
 

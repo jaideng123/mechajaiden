@@ -1,13 +1,22 @@
 import requests
 import json
 from collections import defaultdict
+from threading import Lock
 
+lock = Lock()
 users = defaultdict(int) # Key=username value=EXP
 def init():
     print("Initializing EXP")
+
 # Gives a user some amount of experience points
+# This should be the only interface used to add points to avoid race conditions
 def addExp(user,amount):
-    users[user] += amount
+    if user == 'all':
+        for viewer in listViewers():
+            addExp(viewer, amount)
+    else:
+        with lock:
+            users[user] += amount
 
 # Gets a list of current viewers from the Twitch API
 def listViewers():
@@ -37,11 +46,11 @@ def readExpData(filepath):
     print('File Does Not Exist')
 
 # calculates the user's level
-# I use an arithmetic progression starting from 200, incrementing by 20
+# I use an arithmetic progression starting from 200, incrementing by 10
 def calculateLevel(exp):
     exp_required = 200
     level = 1
     while(exp_required < exp):
     	level += 1
-    	exp_required += exp_required + 20
+    	exp_required += exp_required + 10
     return level,(exp_required-exp)
