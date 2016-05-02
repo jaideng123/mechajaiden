@@ -45,8 +45,8 @@ def expEventLoop():
 #writes exp values every 30 seconds
 def expSaveEventLoop():
     while True:
-        exp.writeExpData('users.json')
         sleep(30)
+        exp.writeExpData('users.json')
 
 def followerEventLoop():
     request_url = 'https://api.twitch.tv/kraken/channels/jaideng123/follows/?limit=1'

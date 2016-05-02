@@ -2,13 +2,19 @@ import cfg
 import exp
 import re
 import requests
+import json
+from datetime import datetime
+from dateutil import parser
+
+
 commands = {
     '!hello': lambda sock,msg,user: hello(sock,msg,user),
     '!add': lambda sock,msg,user: add(sock,msg,user),
     '!list': lambda sock,msg,user: list(sock,msg,user),
     '!queue': lambda sock,msg,user: queue(sock,msg,user),
     '!level': lambda sock,msg,user: level(sock,msg,user),
-    '!giveexp': lambda sock,msg,user: giveexp(sock,msg,user)
+    '!giveexp': lambda sock,msg,user: giveexp(sock,msg,user),
+    '!uptime': lambda sock,msg,user: uptime(sock,msg,user)
 
 }
 
@@ -48,6 +54,18 @@ def queue(sock,msg,user):
 def level(sock,msg,user):
     level, diff = exp.calculateLevel(exp.users[user])
     chat(sock,'{} You Are Currently Level {} ({} exp away from level {})'.format(user,level,diff,level+1))
+
+#Give Exp to a user (or all)
+def uptime(sock,msg,user):
+    request_string = 'https://api.twitch.tv/kraken/streams/jaideng123'
+    r = requests.get(request_string)
+    if(r.status_code == 200):
+        stream = json.loads(r.text)
+        today = datetime.utcnow().replace(tzinfo=None)
+        stream_start = parser.parse(stream['stream']['created_at']).replace(tzinfo=None)
+        chat(sock,'Jaiden has been streaming for {}'.format((today-stream_start)))
+    else:
+        chat(sock,'Tell Jaiden he needs to fix me')
 
 #Give Exp to a user (or all)
 def giveexp(sock,msg,user):

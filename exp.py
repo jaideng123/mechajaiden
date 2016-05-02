@@ -32,9 +32,12 @@ def listViewers():
 
 # write the exp data to a json file
 def writeExpData(filepath):
-    f = open(filepath, 'w')
-    f.write(json.dumps(users))
-
+    print('--- SAVING DO NOT CUT ---')
+    with open(filepath, 'w') as f:
+        f.write(json.dumps(users))
+    with open('BACKUP_'+filepath, 'w') as f:
+        f.write(json.dumps(users))
+    print('--- DONE SAVING ---')
 # write the exp data to a json file
 def readExpData(filepath):
     with open(filepath, 'r') as f:
