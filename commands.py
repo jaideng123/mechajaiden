@@ -61,9 +61,15 @@ def uptime(sock,msg,user):
     r = requests.get(request_string)
     if(r.status_code == 200):
         stream = json.loads(r.text)
-        today = datetime.utcnow().replace(tzinfo=None)
-        stream_start = parser.parse(stream['stream']['created_at']).replace(tzinfo=None)
-        chat(sock,'Jaiden has been streaming for {}'.format((today-stream_start)))
+        if stream['stream']:
+            today = datetime.utcnow().replace(tzinfo=None)
+            stream_start = parser.parse(stream['stream']['created_at']).replace(tzinfo=None)
+            s = (today-stream_start).seconds
+            hours, remainder = divmod(s, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            chat(sock,'Jaiden has been streaming for {} Hours and {} Minutes'.format(hours,minutes))
+        else:
+            chat(sock,'Jaiden is currently not online')
     else:
         chat(sock,'Tell Jaiden he needs to fix me')
 
