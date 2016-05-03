@@ -55,7 +55,7 @@ def level(sock,msg,user):
     level, diff = exp.calculateLevel(exp.users[user])
     chat(sock,'{} You Are Currently Level {} ({} exp away from level {})'.format(user,level,diff,level+1))
 
-#Give Exp to a user (or all)
+#Tells the user how long the stream has been up
 def uptime(sock,msg,user):
     request_string = 'https://api.twitch.tv/kraken/streams/jaideng123'
     r = requests.get(request_string)
