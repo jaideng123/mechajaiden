@@ -49,11 +49,11 @@ def readExpData(filepath):
     print('File Does Not Exist')
 
 # calculates the user's level
-# I use an arithmetic progression starting from 200, incrementing by 10
+# I use an arithmetic progression starting from 200, incrementing by 100
 def calculateLevel(exp):
     exp_required = 200
     level = 1
-    while(exp_required < exp):
+    while(exp_required <= exp):
     	level += 1
-    	exp_required += exp_required + 10
+    	exp_required = exp_required + (exp_required + 20)
     return level,(exp_required-exp)
