@@ -2,6 +2,8 @@ import requests
 import json
 from collections import defaultdict
 from threading import Lock
+from math import sqrt
+from math import pow
 
 lock = Lock()
 users = defaultdict(int) # Key=username value=EXP
@@ -49,11 +51,8 @@ def readExpData(filepath):
     print('File Does Not Exist')
 
 # calculates the user's level
-# I use an arithmetic progression starting from 200, incrementing by 100
+# I use a geometric progression scaling by 100
 def calculateLevel(exp):
-    exp_required = 200
-    level = 1
-    while(exp_required <= exp):
-    	level += 1
-    	exp_required = exp_required + (exp_required + 20)
-    return level,(exp_required-exp)
+    level = int((sqrt(100*(2*exp + 25))+50)/100)
+    exp_required = (pow((level+1),2)+(level+1))/2*100 - ((level+1)*100)
+    return level,int(exp_required)-exp
