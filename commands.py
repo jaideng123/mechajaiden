@@ -1,5 +1,6 @@
 import cfg
 import exp
+import jobs
 import re
 import requests
 import json
@@ -14,7 +15,9 @@ commands = {
     '!queue': lambda sock,msg,user: queue(sock,msg,user),
     '!level': lambda sock,msg,user: level(sock,msg,user),
     '!giveexp': lambda sock,msg,user: giveexp(sock,msg,user),
-    '!uptime': lambda sock,msg,user: uptime(sock,msg,user)
+    '!uptime': lambda sock,msg,user: uptime(sock,msg,user),
+    '!cast': lambda sock,msg,user: cast(sock,msg,user),
+    '!use': lambda sock,msg,user: cast(sock,msg,user)
 
 }
 
@@ -87,7 +90,18 @@ def giveexp(sock,msg,user):
     else:
         chat(sock,'{} Has Received {} Experience Points'.format(recipient,amount))
 
-
+#Uses given ability based on class and level
+def cast(sock,msg,user):
+    if(len(msg.split()) < 2):
+        chat(sock,'Try using one the abilities you have for your current class')
+    ability = msg.split()[1]
+    target = 'no one in particular'
+    if(len(msg.split()) > 3 and msg.split()[2].lower() == 'on' ):
+        target = ''
+        for word in msg.split()[3:]:
+            target += ' '+word
+    message = jobs.flavorText('fighter',ability,user,target)
+    chat(sock,message)
 
 
 # Utility functions
