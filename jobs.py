@@ -8,10 +8,18 @@ with open('classes.json', 'r') as f:
         jobs = json.loads(jsonData)
 
 def flavorText(job,ability,user,target):
-	text = jobs[job]['actions'][ability]['success']
-	text = text.replace('<PLAYER>',user)
-	text = text.replace('<TARGET>',target)
-	return text
+	if(not (ability in jobs[job]['actions'].keys())):
+		return "This action does not exist for you current job"
+	required_level = jobs[job]['actions'][ability]['levelreq']
+	user_level,diff = exp.calculateLevel(exp.users[user]['exp'][getJob(user)]) 
+	if(user_level >= required_level):
+		text = jobs[job]['actions'][ability]['success']
+		text = text.replace('<PLAYER>',user)
+		text = text.replace('<TARGET>',target)
+		return text
+	else:
+		return "{} You must be a level {} {} to use this ability".format(user,required_level,job)
+
 
 def jobList():
 	joblist = []

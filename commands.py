@@ -57,14 +57,14 @@ def queue(sock,msg,user):
 
 #Displays the user's current exp level
 def level(sock,msg,user):
-    job = exp.users[user]['activeClass']
-    class_exp = exp.users[user]['exp'][job]
+    current_job = jobs.getJob(user)
+    class_exp = exp.users[user]['exp'][current_job]
     class_level, diff = exp.calculateLevel(class_exp)
     total_exp = 0
     for job,job_exp in exp.users[user]['exp'].items():
         total_exp += job_exp
     total_level,total_diff = exp.calculateLevel(total_exp)
-    chat(sock,'{} Your {} Level {} ({} exp away from level {}). Your Total Level is {}.'.format(user,job,class_level,diff,class_level+1,total_level))
+    chat(sock,'{} Your {} Level is {} ({} exp away from level {}). Your Total Level is {}.'.format(user,current_job,class_level,diff,class_level+1,total_level))
 
 #Tells the user how long the stream has been up
 def uptime(sock,msg,user):

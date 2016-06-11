@@ -1,1 +1,1 @@
-{"jaideng123": {"exp": {"white-mage": 250, "fighter": 1550}, "activeClass": "white-mage"}, "danimalsounds": {"exp": {"fighter": 750}, "activeClass": "fighter"}, "mechajaiden": {"exp": {"fighter": 19850}, "activeClass": "fighter"}}
+{"mechajaiden": {"activeClass": "fighter", "exp": {"fighter": 20250}}, "danimalsounds": {"activeClass": "fighter", "exp": {"fighter": 750}}, "jaideng123": {"activeClass": "white-mage", "exp": {"white-mage": 750, "fighter": 1550}}}
