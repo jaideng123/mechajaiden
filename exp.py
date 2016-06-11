@@ -6,7 +6,7 @@ from math import sqrt
 from math import pow
 
 lock = Lock()
-users = defaultdict(int) # Key=username value=EXP
+users = {} # Key=username value=EXP
 def init():
     print("Initializing EXP")
 
@@ -18,7 +18,8 @@ def addExp(user,amount):
             addExp(viewer, amount)
     else:
         with lock:
-            users[user] += amount
+            activeClass = users[user]['activeClass']
+            users[user]['exp'][activeClass] += amount
 
 # Gets a list of current viewers from the Twitch API
 def listViewers():
@@ -45,8 +46,11 @@ def readExpData(filepath):
     with open(filepath, 'r') as f:
         jsonData = f.read()
         newUsers = json.loads(jsonData)
-        for user,exp in newUsers.items():
-            users[user] = exp
+        for user,data in newUsers.items():
+            users[user] = {'activeClass':data['activeClass']}
+            users[user]['exp'] = defaultdict(int)
+            for job,exp in data['exp'].items():
+                users[user]['exp'][job] = exp
         return
     print('File Does Not Exist')
 

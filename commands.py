@@ -17,7 +17,9 @@ commands = {
     '!giveexp': lambda sock,msg,user: giveexp(sock,msg,user),
     '!uptime': lambda sock,msg,user: uptime(sock,msg,user),
     '!cast': lambda sock,msg,user: cast(sock,msg,user),
-    '!use': lambda sock,msg,user: cast(sock,msg,user)
+    '!use': lambda sock,msg,user: cast(sock,msg,user),
+    '!changeclass': lambda sock,msg,user: changeclass(sock,msg,user),
+    '!activeclass': lambda sock,msg,user: activeclass(sock,msg,user)
 
 }
 
@@ -55,8 +57,14 @@ def queue(sock,msg,user):
 
 #Displays the user's current exp level
 def level(sock,msg,user):
-    level, diff = exp.calculateLevel(exp.users[user])
-    chat(sock,'{} You Are Currently Level {} ({} exp away from level {})'.format(user,level,diff,level+1))
+    job = exp.users[user]['activeClass']
+    class_exp = exp.users[user]['exp'][job]
+    class_level, diff = exp.calculateLevel(class_exp)
+    total_exp = 0
+    for job,job_exp in exp.users[user]['exp'].items():
+        total_exp += job_exp
+    total_level,total_diff = exp.calculateLevel(total_exp)
+    chat(sock,'{} Your {} Level {} ({} exp away from level {}). Your Total Level is {}.'.format(user,job,class_level,diff,class_level+1,total_level))
 
 #Tells the user how long the stream has been up
 def uptime(sock,msg,user):
@@ -100,9 +108,23 @@ def cast(sock,msg,user):
         target = ''
         for word in msg.split()[3:]:
             target += ' '+word
-    message = jobs.flavorText('fighter',ability,user,target)
+    message = jobs.flavorText(jobs.getJob(user),ability,user,target)
     chat(sock,message)
 
+# Changes the users active class
+def changeclass(sock,msg,user):
+    if(len(msg.split()) < 2):
+        jobs_string = ', '.join(jobs.jobList())
+        chat(sock,'The available classes are {}'.format(jobs_string))
+    if(msg.split()[1] in jobs.jobList()):
+        jobs.setJob(user,msg.split()[1])
+        chat(sock,'Your Active Job has been changed to: {}'.format(msg.split()[1]))
+    else:
+        chat(sock,'The available classes are {}'.format(jobs_string))
+
+#Displays the user's active class
+def activeclass(sock,msg,user):
+    chat(sock,'Your Active Job is: {}'.format(jobs.getJob(user)))
 
 # Utility functions
 
