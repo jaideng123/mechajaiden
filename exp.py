@@ -18,6 +18,7 @@ def addExp(user,amount):
             addExp(viewer, amount)
     else:
         with lock:
+            
             activeClass = users[user]['activeClass']
             users[user]['exp'][activeClass] += amount
 

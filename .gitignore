@@ -4,4 +4,6 @@ cfg.py
 
 *.sublime-workspace
 *.sublime-project
-users.json
+*users.json
+users_OLD.json
+

@@ -120,6 +120,7 @@ def changeclass(sock,msg,user):
         jobs.setJob(user,msg.split()[1])
         chat(sock,'Your Active Job has been changed to: {}'.format(msg.split()[1]))
     else:
+        jobs_string = ', '.join(jobs.jobList())
         chat(sock,'The available classes are {}'.format(jobs_string))
 
 #Displays the user's active class
