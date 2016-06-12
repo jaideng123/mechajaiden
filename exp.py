@@ -18,10 +18,11 @@ def addExp(user,amount):
             addExp(viewer, amount)
     else:
         with lock:
-            
+            if(not (user in users.keys())):
+                users[user] = {"activeClass":'fighter'}
+                users[user]['exp'] = defaultdict(int)
             activeClass = users[user]['activeClass']
             users[user]['exp'][activeClass] += amount
-
 # Gets a list of current viewers from the Twitch API
 def listViewers():
     request_string = 'https://tmi.twitch.tv/group/user/jaideng123/chatters'
